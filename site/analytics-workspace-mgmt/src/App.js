@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/workspace');
+        const response = await fetch('/api/workspace');
         const result = await response.json();
         setData(result);
       } catch (error) {

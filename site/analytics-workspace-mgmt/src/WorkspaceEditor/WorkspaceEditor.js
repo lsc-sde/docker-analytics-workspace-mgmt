@@ -30,7 +30,7 @@ export default function WorkspaceEditor({item, itemChanged}) {
                 body: JSON.stringify(newItem)
             };
 
-            const response = await fetch('http://localhost:8000/api/workspace', requestOptions);
+            const response = await fetch('/api/workspace', requestOptions);
             const result = await response.json();
             console.info(newItem);
             newItemChanged(result);

@@ -35,7 +35,14 @@ async def serve_spa(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 async def get_api_client():
-    await load_kube_config()
+        
+    kubernetes_service_host = getenv("KUBERNETES_SERVICE_HOST")
+
+    if kubernetes_service_host:
+        await load_incluster_config()
+    else:
+        await load_kube_config()
+
     return ApiClient()
     
 
