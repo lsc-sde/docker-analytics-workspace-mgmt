@@ -30,10 +30,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/")
-async def serve_spa(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
 async def get_api_client():
         
     kubernetes_service_host = getenv("KUBERNETES_SERVICE_HOST")
@@ -157,3 +153,23 @@ async def update_workspace_binding(binding : AnalyticsWorkspaceBinding) -> Analy
         return created_binding
     finally:
         await api_client.close()
+
+@app.post("/api/workspace-bindings")
+async def create_workspace_binding(binding : AnalyticsWorkspaceBinding) -> AnalyticsWorkspaceBinding:
+    api_client = await get_api_client()
+    workspace_manager = await get_workspace_manager(api_client = api_client)
+    try:
+        created_binding = await workspace_manager.binding_client.create(body = binding)
+        return created_binding
+    finally:
+        await api_client.close()
+
+@app.get("/{full_path:path}")
+async def catch_all(request: Request, full_path: str):
+    print("full_path: "+full_path)
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/")
+async def serve_spa(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+

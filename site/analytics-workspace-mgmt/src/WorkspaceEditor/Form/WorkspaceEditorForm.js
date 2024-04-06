@@ -15,8 +15,9 @@ import JupyterPersistentVolumeClaimFormItem from './FormItems/JupyterPersistentV
 import JupyterPersistentVolumeClaimStorageClass from './FormItems/JupyterPersistentVolumeClaimStorageClass.js'
 import JupyterResourcesFormItem from './FormItems/JupyterResourcesFormItem.js'
 import JupyterTolerationsFormItem from './FormItems/JupyterTolerationsFormItem.js'
+import WorkspaceBindingEditor from '../Bindings/WorkspaceBindingEditor.js';
 
-export default function WorkspaceEditorForm({item, onChange}){
+export default function WorkspaceEditorForm({item, onChange, defaultActiveKey}){
     const id = "form-" + item.metadata.name
     const tabsId = "tabs-" + item.metadata.name
     
@@ -26,7 +27,7 @@ export default function WorkspaceEditorForm({item, onChange}){
 
     return (
         <Form id={id}>
-            <Tab.Container id={tabsId} defaultActiveKey="basics" generateChildId={generateChildId}>
+            <Tab.Container id={tabsId} defaultActiveKey={defaultActiveKey} generateChildId={generateChildId}>
                 <Row>
                     <Col sm={2}>
                         <Nav variant="pills" className="flex-column">
@@ -38,6 +39,9 @@ export default function WorkspaceEditorForm({item, onChange}){
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="jupyter-adv">Jupyter Advanced</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="bindings">Bindings</Nav.Link>
                             </Nav.Item>
                         </Nav>
                     </Col>
@@ -72,6 +76,9 @@ export default function WorkspaceEditorForm({item, onChange}){
                                 <JupyterExtraLabelsFormItem item={item} onChange={onChange} />
                                 <JupyterNodeSelectorFormItem item={item} onChange={onChange} />
                                 <JupyterTolerationsFormItem item={item} onChange={onChange} />                               
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="bindings">
+                                <WorkspaceBindingEditor workspaceId={item.metadata.name} />
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>

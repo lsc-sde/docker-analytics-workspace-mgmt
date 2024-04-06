@@ -3,4 +3,10 @@
     width: 80%;
 }
 
+.card-text {
+    height: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 @import '~bootstrap/scss/bootstrap.scss';

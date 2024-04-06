@@ -1,65 +1,63 @@
 import Button from 'react-bootstrap/Button';
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState, useEffect } from 'react';
 import WorkspaceEditorForm from './Form/WorkspaceEditorForm.js';
+import { ApiService } from '../Api.js'
+import { Link, useParams } from 'react-router-dom';
 
-
-export default function WorkspaceEditor({item, itemChanged}) {
-    const [show, setShow] = useState(false);
-    const [changed, setChanged] = useState(false);
+export default function WorkspaceEditor({defaultActiveKey = "basics"}) {
+    const { workspaceId } = useParams();
+    const item = { "metadata" : { "name" : workspaceId }};
     const [newItem, newItemChanged] = useState(item);
-    const handleClose = () => {
-        if(changed){
-            console.warn(item.metadata.name + " has changed");
-        }
-        setShow(false);
-    };
-    const handleShow = () => setShow(true);
     const onChange = (e, newItem) => {
-        setChanged(true);
         if(!!newItem){
             newItemChanged(newItem);
         }
     }
-    const save = async () => {
-        console.info("Saving changes to " + newItem.metadata.name);
-        try {
-            const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newItem)
-            };
 
-            const response = await fetch('/api/workspace', requestOptions);
-            const result = await response.json();
-            console.info(newItem);
+    useEffect(() => {
+        const fetchData = async () => {
+            console.info("Fetching Data");
+            try {
+                const api = new ApiService();
+                const result = await api.FetchWorkspace(workspaceId);
+                console.info(result);
+                newItemChanged(result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [ workspaceId ]);
+
+
+    const save = async () => {
+        try {
+            const api = new ApiService();
+            const result = await api.UpdateWorkspace(newItem);
+            console.info(result);
             newItemChanged(result);
-            itemChanged(result);
-            setChanged(false);
-            handleClose();
         } catch(ex){
             console.error(ex);
         }
     }
 
+    if(newItem.spec === null || newItem.spec === undefined){
+        return (
+            <div>
+                Loading...
+            </div>
+        )
+    }
 
     return (
         <div>
-            <Button onClick={handleShow}>
-                Edit
+            <Link to={`/`}>Home</Link>
+            <h1>{newItem.metadata.namespace}/{newItem.metadata.name}</h1>
+            <WorkspaceEditorForm item={newItem} onChange={onChange} defaultActiveKey={defaultActiveKey} />
+            <Button onClick={save}>
+                Save
             </Button>
-            <Modal show={show} onHide={handleClose} fullscreen={true}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{newItem.metadata.namespace}/{newItem.metadata.name}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <WorkspaceEditorForm item={newItem} onChange={onChange} />
-                    <Button onClick={save}>
-                        Save
-                    </Button>
-                </Modal.Body>
-            </Modal>
-            
         </div>
-    )
+    );
 }
