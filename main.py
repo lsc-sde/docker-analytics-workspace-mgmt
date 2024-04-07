@@ -26,7 +26,6 @@ app.add_middleware(
 
 namespace = getenv("NAMESPACE", "jupyterhub")
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
@@ -166,7 +165,7 @@ async def create_workspace_binding(binding : AnalyticsWorkspaceBinding) -> Analy
     finally:
         await api_client.close()
 
-@app.get("/{full_path:path}")
+@app.get("/workspaces/{full_path:path}")
 async def catch_all(request: Request, full_path: str):
     print("full_path: "+full_path)
     return templates.TemplateResponse("index.html", {"request": request})
@@ -175,3 +174,6 @@ async def catch_all(request: Request, full_path: str):
 async def serve_spa(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/", StaticFiles(directory="templates"), name="templates")
