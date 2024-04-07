@@ -35,11 +35,13 @@ async def get_api_client():
     kubernetes_service_host = getenv("KUBERNETES_SERVICE_HOST")
 
     if kubernetes_service_host:
-        await load_incluster_config()
+        load_incluster_config()
+        return ApiClient()
+
     else:
         await load_kube_config()
+        return ApiClient()
 
-    return ApiClient()
     
 
 async def get_workspace_manager(api_client):
