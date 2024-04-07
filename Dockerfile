@@ -21,7 +21,11 @@ RUN pip install lscsde-workspace-mgmt==0.1.3
 RUN pip install logger
 RUN pip install jinja2
 ADD ./main.py /src/
-COPY --from=build /code/build/index.html /src/templates/
+COPY --from=build /code/build/*.html /src/templates/
+COPY --from=build /code/build/*.json /src/templates/
+COPY --from=build /code/build/*.png /src/templates/
+COPY --from=build /code/build/*.ico /src/templates/
+COPY --from=build /code/build/*.txt /src/templates/
 COPY --from=build /code/build/static/ /src/static/
 
 WORKDIR /src
