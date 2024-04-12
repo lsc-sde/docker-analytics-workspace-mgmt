@@ -71,4 +71,3 @@ docker build .
 Once your changes are PR'd to the main branch the pipelines will generate a new docker image and automatically upload these to [dockerhub](https://hub.docker.com/r/lscsde/analytics-workspace-mgmt).
 
 Once the new tag is generated, this will need to be updated in the associated helm chart:
-
