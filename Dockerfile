@@ -17,7 +17,7 @@ RUN pip install --upgrade pip
 RUN pip install kubernetes
 RUN pip install fastapi
 RUN pip install uvicorn
-RUN pip install lscsde-workspace-mgmt==0.1.3
+RUN pip install lscsde-workspace-mgmt==0.1.9
 RUN pip install logger
 RUN pip install jinja2
 ADD ./main.py /src/
