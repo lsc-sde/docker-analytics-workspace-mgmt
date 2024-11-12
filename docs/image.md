@@ -1,6 +1,6 @@
 ---
-title: Management Portal
-parent: Analytics Workspace Management Services
+title: Portal Application
+parent: Management Portal
 layout: page
 grand_parent: Architecture
 ---
