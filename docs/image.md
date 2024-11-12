@@ -1,8 +1,8 @@
 ---
-title: Container Image
-parent: Analytics Workspace Management Portal
+title: Management Portal
+parent: Analytics Workspace Management Services
 layout: page
-grand_parent: Components
+grand_parent: Architecture
 ---
 The Analytics Workspace Management Portal is designed to simplify the management of Analytics Workspaces in a Kubernetes Jupyterhub environment. It provides a simple user interface to allow the management of workspaces and bindings that allow the mapping of users to a workspace.
 
